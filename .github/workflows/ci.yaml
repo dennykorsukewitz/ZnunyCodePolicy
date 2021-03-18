@@ -22,10 +22,12 @@ jobs:
           MYSQL_DATABASE: "otrs"
 
     steps:
-      - name: Check out repository code
+      - name: Znuny - Check out repository code
         env:
           GIT_DEPTH: "1"
         uses: actions/checkout@v2
+        with:
+          path: znuny
 
       - name: Install dependencies
         run: |
@@ -80,13 +82,6 @@ jobs:
           apt-get update -y
           apt-get upgrade -y
           apt-get install -y cpanminus make gcc npm git gettext libxml-libxml-perl libyaml-perl libxml2-utils libdatetime-perl libtemplate-perl libapache-dbi-perl
-
-      - name: ZnunyCodePolicy - Check out repository code
-        env:
-          GIT_DEPTH: "1"
-        uses: actions/checkout@v2
-        with:
-          path: znuny
 
       - name: ZnunyCodePolicy - Check out code policy
         env:
