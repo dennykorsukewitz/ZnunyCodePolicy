@@ -27,7 +27,7 @@ jobs:
           GIT_DEPTH: "1"
         uses: actions/checkout@v2
         with:
-          path: znuny
+          repository: znuny/ZnunyCodePolicy
 
       - name: Install dependencies
         run: |
@@ -88,7 +88,6 @@ jobs:
           GIT_DEPTH: "1"
         uses: actions/checkout@v2
         with:
-          repository: znuny/ZnunyCodePolicy
           path: codepolicy
 
       - name: ZnunyCodePolicy - Prepare code policy
@@ -96,15 +95,11 @@ jobs:
           cpanm Code::TidyAll Perl::Critic
           codepolicy/bin/otrs.CodePolicy.pl --install
 
-      - name: ZnunyCodePolicy - Run code policy
-        run: |
-          cd "${GITHUB_WORKSPACE}/znuny"
-          "${GITHUB_WORKSPACE}/codepolicy/bin/otrs.CodePolicy.pl" --all
-
       - name: ZnunyCodePolicy- Run UnitTests
         env:
           # Insert tests/options to run here if you're not interested in the whole suite
           TEST_OPTIONS: ""
         run: |
+          cp "${GITHUB_WORKSPACE}/codepolicy ${GITHUB_WORKSPACE}"
           su -c "bin/otrs.Console.pl Dev::UnitTest::Run --verbose --directory OTRSCodePolicyPlugins" -s /bin/bash otrs
           su -c "bin/otrs.Console.pl Dev::UnitTest::Run --verbose --directory ZnunyCodePolicyPlugins" -s /bin/bash otrs
